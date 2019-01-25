@@ -36,7 +36,121 @@
         }
     }
 
+    function getUserFollowerCount($id){
+        global $conn;
 
+        $query = "SELECT COUNT(*) as followers FROM `followings` WHERE `rhsUserId` = $id;";
+
+        $result = $conn->query($query);
+
+        return $result->fetch_assoc()['followers'];
+    }
+
+    function getUserFollowingCount($id){
+        global $conn;
+
+        $query = "SELECT COUNT(*) as followings FROM `followings` WHERE `lhsUserId` = $id;";
+
+        $result = $conn->query($query);
+
+        return $result->fetch_assoc()['followings'];
+    }
+
+    function getUserPosts($id){
+        global $conn;
+
+        $query = "SELECT COUNT(*) as followings FROM `followings` WHERE `lhsUserId` = $id;";
+
+        $result = $conn->query($query);
+
+        return $result->fetch_assoc()['followings'];
+    }
+
+
+    function getUserPost($id){
+        global $conn;
+
+        $query = "SELECT * FROM `post` WHERE `author` = $id; ";
+
+        $posts = array();
+
+        $result = $conn->query($query);
+
+        while ($row = $result->fetch_assoc()){
+            array_push($posts,$row);
+        }
+        return $posts;
+    }
+
+    function isFollowing($id, $target){
+        global $conn;
+
+        $query = "SELECT * FROM `followings` WHERE `lhsUserId` = $id and `rhsUserId` = $target; ";
+
+        $result = $conn->query($query);
+
+        if ($result->num_rows > 0)
+            return true;
+        return false;
+    }
+
+    function followUser($id, $target){
+        global $conn;
+
+        $query = "INSERT INTO `followings`(`lhsUserId`, `rhsUserId`) VALUES ($id, $target)";
+
+        if ($conn->query($query) === TRUE){
+            // done
+        } else {
+            echo "Could not follow";
+        }
+    }
+
+    function unfollowUser($id, $target){
+        global $conn;
+
+        $query = "DELETE FROM `followings` WHERE `lhsUserId` = $id  AND `rhsUserId` = $target";
+
+        if ($conn->query($query) === TRUE){
+            // done
+        } else {
+            echo "Could not unfollow";
+        }
+    }
+
+    function hasUserLiked($id, $target){
+        global $conn;
+
+        $query = "SELECT * FROM `likes` WHERE `userId` = $id AND `postId` = $target;";
+        $result = $conn->query($query);
+        
+        if ($result->num_rows > 0)
+            return true;
+        return false;
+    }
+
+
+    function likePost($id, $target){
+        global $conn;
+        $query = "INSERT INTO `likes`(`userId`, `postId`) VALUES ($id, $target);";
+
+        if ($conn->query($query) === TRUE){
+            // liked
+        } else {
+            echo "Could not like";
+        }
+    }
+
+    function unlikePost($id, $target){
+        global $conn;
+        $query = "DELETE FROM `likes` WHERE `userId` = $id AND `postId` = $target";
+
+        if ($conn->query($query) === TRUE){
+            // liked
+        } else {
+            echo "Could not unlike";
+        }
+    }
 
     function uploadLatestPhoto($img, $base, $un){
         echo $base;
@@ -104,5 +218,22 @@
             }
         }
 
+    }
+
+
+    function allUsers(){
+        global $conn;
+
+        $query = "SELECT * FROM `user`;";
+
+        $users = array();
+
+        $result = $conn->query($query);
+
+        while ($row = $result->fetch_assoc()){
+            array_push($users, $row);
+        }
+
+        return $users;
     }
 ?>

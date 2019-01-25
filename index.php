@@ -46,6 +46,26 @@
             sendPost($_POST['caption']);
             break;
         }
+
+        case "followUser": {
+            followUser($_SESSION['user_id'], $_POST['target']);
+            break;
+        }
+
+        case "unfollowUser":{
+            unfollowUser($_SESSION['user_id'], $_POST['target']);
+            break;
+        }
+
+        case "unlike":{
+            unlikePost($_SESSION['user_id'], $_POST['target']);
+            break;
+        }
+
+        case "like":{
+            likePost($_SESSION['user_id'], $_POST['target']);
+            break;
+        }
     }
 ?>
 <!DOCTYPE <!DOCTYPE html>
@@ -74,8 +94,10 @@
                         require "post.php";
                         require "activity.php";
                     }
-                    else if ($page == "profile")
+                    else if ($page == "profile"){
+                        $profileUserId = $_SESSION['user_id'];
                         require "profile.php";
+                    }
                     else if ($page == "followers")
                         require "follower.php";
                     else if ($page == "addPost")
@@ -85,6 +107,11 @@
                         require "logedOut.php";
                     } else if ($page == "newPost")
                         require "addPost.php";
+                    else if ($page == "viewProfile"){
+                        // context change :)
+                        $profileUserId = $_GET['id'];
+                        require "profile.php";
+                    }
                     else
                         echo "<h1>Not Found</h1>";
                 }   

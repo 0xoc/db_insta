@@ -7,24 +7,27 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="?page=home">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="index.php?page=home">Home <span class="sr-only">(current)</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="?page=profile">Profile</a>
+        <a class="nav-link" href="index.php?page=profile">Profile</a>
       </li>
+      <li class="nav-item">
+            <a class="nav-link" href="userList.php">All users</a>
+          </li>
       
       <?php if (!isset($_SESSION['user_id'])) { ?>
       <li class="nav-item">
-        <a class="nav-link" href="?page=register">Register</a>
+        <a class="nav-link" href="index.php?page=register">Register</a>
       </li>
       <?php } else { ?>
       <li class="nav-item">
-        <a class="nav-link" href="?page=logout">Logout</a>
+        <a class="nav-link" href="index.php?page=logout">Logout</a>
       </li>
 
       <li class="nav-item">
-            <a class="nav-link" href="?page=newPost">New Post</a>
+            <a class="nav-link" href="index.php?page=newPost">New Post</a>
       </li>
       <?php } ?>
     </ul>
