@@ -16,6 +16,8 @@
     $singlePostAvatar = $posts[$i]['avatarPath'];
     $singlePostAuthorId = $posts[$i]['userId'];
     $showAuthorInfo = true;
+    $singlePostIsSaved = isPostSaved($_SESSION['user_id'], $singlePosetId);
+
     
     require "singlePost.php";
 } ?>

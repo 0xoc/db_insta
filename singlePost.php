@@ -33,7 +33,21 @@
         <a href="postInfo.php?postId=<?php echo $singlePosetId; ?>">
             <img src="img/comment.png" class="ima-fluid postFooterImg" style="float:left;"  />
         </a>
-        <img src="img/bookmark_black.png" class="ima-fluid postFooterImg" style="float:left;"  />
+
+
+        <?php if ($singlePostIsSaved) { ?>
+        <form action="#" method="POST" >
+            <input type="hidden" name="requestType" value="unsave" />
+            <input type="hidden" name="target" value="<?php echo $singlePosetId; ?>" />
+            <input type=image src=img/bookmark_red.png class=" postFooterImg"/>
+      </form>
+      <?php } else { ?>
+        <form action="#" method="POST">
+            <input type="hidden" name="requestType" value="save" />
+            <input type="hidden" name="target" value="<?php echo $singlePosetId; ?>" />
+            <input type=image src=img/bookmark_black.png class=" postFooterImg"/>
+        </form>
+      <?php } ?>
    
   </div>
 </div>

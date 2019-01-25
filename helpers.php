@@ -125,6 +125,43 @@
     }
 
 
+    function isPostSaved($id,$post){
+        global $conn;
+
+        $query = "SELECT * FROM saves WHERE userId = $id AND postId = $post";
+
+        $result = $conn->query($query);
+
+        if ($result->num_rows > 0)
+            return true;
+        return false;
+
+    }
+
+    function savePost($id,$post){
+        global $conn;
+
+        $query = "INSERT INTO `saves` (`userId`, `postId`) VALUES ($id, $post);";
+
+        if ($conn->query($query) === TRUE){
+            // saved
+        } else {
+            echo "could not save post";
+        }
+    }
+
+    function unsavePost($id,$post){
+        global $conn;
+
+        $query = "DELETE FROM `saves` WHERE `userId` = $id AND `postId` = $post";
+
+        if ($conn->query($query) === TRUE){
+            // deleted
+        } else {
+            echo "could not unsave post";
+        }
+    }
+
     function getFollowingPosts($id){
         
         global $conn;
@@ -318,6 +355,23 @@
 
     }
 
+
+    function getSavedPosts($id){
+        global $conn;
+
+        $query = "SELECT post.id as postId, post.caption, post.date, user.avatarPath,post.imgPath, user.id as userId, user.name, 
+        user.last_name FROM post,user WHERE post.author = user.id AND post.id in (SELECT postId FROM saves WHERE userId = $id) ";
+
+        $result = $conn->query($query);
+
+        $posts = array();
+
+        while($row = $result->fetch_assoc()){
+            array_push($posts,$row);
+        }
+
+        return $posts;
+    }
 
     function allUsers(){
         global $conn;

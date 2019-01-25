@@ -24,7 +24,9 @@
         $requestType = $_POST['requestType'];
 
 
-    
+    if (isset($_POST['LOGOUT'])){
+        logout();
+    }
 
     // proccess any request
     switch ($requestType){
@@ -66,6 +68,16 @@
             likePost($_SESSION['user_id'], $_POST['target']);
             break;
         }
+
+        case "save":{
+            savePost($_SESSION['user_id'], $_POST['target']);
+            break;
+        }
+
+        case "unsave":{
+            unsavePost($_SESSION['user_id'], $_POST['target']);
+            break;
+        }
     }
 ?>
 <!DOCTYPE <!DOCTYPE html>
@@ -102,10 +114,7 @@
                         require "follower.php";
                     else if ($page == "addPost")
                         require "addPost.php";
-                    else if ($page == "logout"){
-                        logout();
-                        require "logedOut.php";
-                    } else if ($page == "newPost")
+                    else if ($page == "newPost")
                         require "addPost.php";
                     else if ($page == "viewProfile"){
                         // context change :)

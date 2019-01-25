@@ -45,6 +45,7 @@
                 $singlePosetId  = $posts[$i]['id'];
                 $singlePostIsLiked = hasUserLiked($_SESSION['user_id'], $singlePosetId);
                 $showAuthorInfo = false;
+                $singlePostIsSaved = isPostSaved($_SESSION['user_id'], $singlePosetId);
             ?>
             <div class="col-md-4 col-sm-12">
             <?php require "singlePost.php"; ?>
