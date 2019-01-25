@@ -11,8 +11,8 @@
     <img class="profileAvatar" src="<?php echo $userInfo['avatarPath']; ?>" />
     <div class="profileInfo">
         <h4 class="display-4 profileName"  style="font-size:30px;"> <?php echo $userInfo['name'] . " " . $userInfo['last_name']; ?> </h4>
-        <h4 class="display-4 profileName"  style="font-size:20px;"> <?php echo $followers; ?> Follower </h4>
-        <h4 class="display-4 profileName"  style="font-size:20px;"> <?php echo $followings; ?> Following </h4>        
+        <a href="follower.php?type=followers&user=<?php echo $userInfo['id']; ?>" class="display-4 profileName"  style="font-size:20px;"> <?php echo $followers; ?> Follower </a>
+        <a href="follower.php?type=followings&user=<?php echo $userInfo['id']; ?>" class="display-4 profileName"  style="font-size:20px;"> <?php echo $followings; ?> Following </a>        
     </div>
 
     <?php if($profileUserId != $_SESSION['user_id']){   // other page
@@ -44,7 +44,7 @@
                 $singlePostTime = $posts[$i]['date'];
                 $singlePosetId  = $posts[$i]['id'];
                 $singlePostIsLiked = hasUserLiked($_SESSION['user_id'], $singlePosetId);
-
+                $showAuthorInfo = false;
             ?>
             <div class="col-md-4 col-sm-12">
             <?php require "singlePost.php"; ?>

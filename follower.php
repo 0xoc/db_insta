@@ -1,21 +1,31 @@
+<?php 
+    require "helpers.php";
 
-<div class="offset-lg-1 col-lg-10 col-md-12" style="margin-top: 20px;">
-<div class="card">
-  <div class="card-header">
-    <img class="postAuthorAvatar" src="img/sampleAvatar.png" />
-    <h4 class="display-4 authorName"  style="font-size:30px;"> Ali Parvizi's followers </h4>
-  </div>
-  <div class="card-body">
-    <div class="postContent">    
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Morbi leo risus</li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-        </ul>
-    </div>
+    $users = 0;
 
-  </div>
-</div>
-</div>
+    $userId = $_GET['user'];
+    $type = $_GET['type'];
+
+
+    if ($type == "followers")
+        $users = getFollowers($userId);
+    else
+        $users= getFollowings($userId);
+?>
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<?php require "header.php" ?>
+<body>
+    <?php require "topBar.php"; ?>
+
+<ul class="list-group list-group-flush">
+    <?php for ($i = 0 ; $i < sizeof($users); $i++) { ?>
+        <li class="list-group-item"><?php echo $users[$i]['name'] . " " . $users[$i]['last_name']; ?>
+        <a href="index.php?page=viewProfile&id=<?php echo $users[$i]['id']; ?>"> View Profile </a>
+    </li>
+    <?php } ?>
+</ul>
+
+<?php require "footer.php"; ?>
+</body>
+</html>

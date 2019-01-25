@@ -46,6 +46,104 @@
         return $result->fetch_assoc()['followers'];
     }
 
+    function getFollowers($id){
+        global $conn;
+
+        $query = "SELECT * FROM user WHERE id in (SELECT lhsUserId FROM followings where rhsUserId = $id )";
+
+        $result = $conn->query($query);
+
+        $users = array();
+
+        while($row = $result->fetch_assoc()){
+            array_push($users, $row);
+        }
+
+        return $users;
+    }
+
+    function getFollowings($id){
+        global $conn;
+
+        $query = "SELECT * FROM user WHERE id in (SELECT rhsUserId FROM followings where lhsUserId = $id )";
+
+        $result = $conn->query($query);
+
+        $users = array();
+
+        while($row = $result->fetch_assoc()){
+            array_push($users, $row);
+        }
+
+        return $users;
+    }
+
+    function getPostComments($post){
+        global $conn;
+
+        $query = "SELECT `commentText`, `name`, `last_name`, `userId` FROM `comment`,`user` WHERE postId = $post and user.id = userId";
+        
+        $result = $conn->query($query);
+
+        $comments = array();
+
+        while($row = $result->fetch_assoc()){
+            array_push($comments, $row);
+        }
+
+        return $comments;
+
+    }
+
+    function getPostLikes($post){
+        global $conn;
+
+        $query = "SELECT  `name`, `last_name`, `userId` FROM `likes`,`user` WHERE postId = $post and user.id = userId";
+        
+        $result = $conn->query($query);
+
+        $likes = array();
+
+        while($row = $result->fetch_assoc()){
+            array_push($likes, $row);
+        }
+
+        return $likes;
+
+    }
+
+    function commentOnPost($id, $post, $comment){
+        global $conn;
+
+        $query = "INSERT INTO `comment`( `userId`, `postId`, `commentText`) VALUES ($id, $post, \"$comment\")";
+
+        if ($conn->query($query) === TRUE){
+            // comment done
+        } else {
+            echo "Could not commet";
+        }
+    }
+
+
+    function getFollowingPosts($id){
+        
+        global $conn;
+
+        $query = "SELECT post.id as postId, post.caption, post.date, user.avatarPath,post.imgPath, user.id as userId, user.name, user.last_name FROM post,user WHERE post.author = user.id AND
+         user.id in ( SELECT rhsUserId FROM followings WHERE lhsUserId = $id ) ORDER BY post.date
+        ";
+
+        $result = $conn->query($query);
+
+        $posts = array();
+
+        while($row = $result->fetch_assoc()){
+            array_push($posts,$row);
+        }
+
+        return $posts;
+    }
+
     function getUserFollowingCount($id){
         global $conn;
 
