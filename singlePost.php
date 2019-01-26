@@ -48,6 +48,6 @@
             <input type=image src=img/bookmark_black.png class=" postFooterImg"/>
         </form>
       <?php } ?>
-   
+     <small> <?php echo $singlePostTime; ?></small>
   </div>
 </div>

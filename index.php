@@ -120,7 +120,8 @@
                         // context change :)
                         $profileUserId = $_GET['id'];
                         require "profile.php";
-                    }
+                    } else if ($page == "explore")
+                        require "bestPosts.php";
                     else
                         echo "<h1>Not Found</h1>";
                 }   

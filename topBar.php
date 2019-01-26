@@ -15,7 +15,11 @@
       </li>
       <li class="nav-item">
             <a class="nav-link" href="userList.php">All users</a>
-          </li>
+        </li>
+
+        <li class="nav-item">
+                <a class="nav-link" href="index.php?page=explore">explore</a>
+        </li>
       
       <?php if (!isset($_SESSION['user_id'])) { ?>
       <li class="nav-item">

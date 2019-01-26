@@ -167,8 +167,28 @@
         global $conn;
 
         $query = "SELECT post.id as postId, post.caption, post.date, user.avatarPath,post.imgPath, user.id as userId, user.name, user.last_name FROM post,user WHERE post.author = user.id AND
-         user.id in ( SELECT rhsUserId FROM followings WHERE lhsUserId = $id ) ORDER BY post.date
+         user.id in ( SELECT rhsUserId FROM followings WHERE lhsUserId = $id ) ORDER BY post.date DESC
         ";
+
+        $result = $conn->query($query);
+
+        $posts = array();
+
+        while($row = $result->fetch_assoc()){
+            array_push($posts,$row);
+        }
+
+        return $posts;
+    }
+
+
+    function getBestPosts(){
+        global $conn;
+        $query = "SELECT post.id as postId, post.caption, post.date, user.avatarPath,post.imgPath, user.id as userId, user.name, user.last_name 
+        FROM post,user WHERE post.author = user.id AND ((SELECT COUNT(*) FROM likes WHERE likes.postId = post.id ) > SOME( SELECT COUNT(*) FROM `likes` WHERE likes.postId != post.id GROUP BY likes.postId) or 
+        (SELECT COUNT(*) FROM comment WHERE comment.postId = post.id ) > SOME( SELECT COUNT(*) FROM `comment` WHERE comment.postId != post.id GROUP BY comment.postId)
+        
+        ) ORDER BY post.date DESC";
 
         $result = $conn->query($query);
 
