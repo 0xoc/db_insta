@@ -4,16 +4,43 @@
     $postId = $_GET['postId'];
     
     if (isset($_POST['requestType'])){
-        if (isset($_SESSION['user_id'])) {
-            commentOnPost($_SESSION['user_id'], $_POST['target'],$_POST['comment']);
-        } else {
-            echo "login to comment";
+        switch ($_POST['requestType']){
+            case "save":{
+                savePost($_SESSION['user_id'], $_POST['target']);
+                break;
+            }
+    
+            case "unsave":{
+                unsavePost($_SESSION['user_id'], $_POST['target']);
+                break;
+            }
+            case "unlike":{
+                unlikePost($_SESSION['user_id'], $_POST['target']);
+                break;
+            }
+    
+            case "like":{
+                likePost($_SESSION['user_id'], $_POST['target']);
+                break;
+            }
+    
+            case "newComment":
+            {
+                if (isset($_SESSION['user_id'])) {
+                    commentOnPost($_SESSION['user_id'], $_POST['target'],$_POST['comment']);
+                } else {
+                    echo "login to comment";
+                }
+            }
         }
     }
+
+
 
     $comments = getPostComments($postId);
     $likes = getPostLikes($postId);
 
+    $thePost = getPostById($postId);
     
 ?>
 <!DOCTYPE <!DOCTYPE html>
@@ -23,6 +50,22 @@
     <?php require "topBar.php"; ?>
 
     <div class="container" style="margin-top:10px;">
+        <div class="row">
+        <?php 
+         // set the context
+    $singlePostImage =$thePost['imgPath'];  
+    $singlePostCaption = $thePost['caption'];
+    $singlePostTime =   $thePost['date'];
+    $singlePosetId  =   $thePost['postId'];
+    $singlePostIsLiked = hasUserLiked($_SESSION['user_id'], $singlePosetId);
+    $singlePostAuthor = $thePost['name'] . " " . $thePost['last_name'];
+    $singlePostAvatar = $thePost['avatarPath'];
+    $singlePostAuthorId = $thePost['userId'];
+    $showAuthorInfo = true;
+    $singlePostIsSaved = isPostSaved($_SESSION['user_id'], $singlePosetId);
+        require "singlePost.php";
+        ?>
+        </div>
         <div class="row">
             <div class="col-md-8 col-sm-12">
                 <div class="card">

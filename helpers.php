@@ -112,6 +112,49 @@
 
     }
 
+    function getLikeAndCommentActivities($id){
+        global $conn;
+
+        $query = "SELECT DISTINCTROW
+        AC.id as AC_ID, AC.name AS AC_NAME, AC.last_name as AC_LAST_NAME,
+        P.id as P_ID, P.caption AS P_CAPTION, activityTime,type
+        FROM `activity`,post as P, user as AC, user as AT WHERE `actor` in (SELECT rhsUserId FROM followings WHERE lhsUserId = $id) AND P.id = activity.postId AND actor = AC.id AND (type = \"Liked\" or type = \"Commented\" )
+        ";
+
+        $result = $conn->query($query);
+
+        $data = array();
+
+        while ($row = $result->fetch_assoc()){
+            array_push($data, $row);
+        }
+
+        return $data;
+
+    }
+
+    function getFollowingsActivity($id){
+        global $conn;
+
+        $query = "SELECT DISTINCTROW
+        AC.id as AC_ID, AC.name AS AC_NAME, AC.last_name as AC_LAST_NAME,
+        AT.id as AT_ID, AT.name AS AT_NAME, AT.last_name as AT_LAST_NAME,
+        activityTime, type
+        FROM `activity`,user as AC, user as AT WHERE `actor` in (SELECT rhsUserId FROM followings WHERE lhsUserId = $id) AND actor = AC.id AND (type = \"Followed\" ) AND AT.id != AC.id
+        ";
+
+        $result = $conn->query($query);
+
+        $data = array();
+
+        while ($row = $result->fetch_assoc()){
+            array_push($data, $row);
+        }
+
+        return $data;
+
+    }
+
     function commentOnPost($id, $post, $comment){
         global $conn;
 
@@ -181,6 +224,17 @@
         return $posts;
     }
 
+    function getPostById($id){
+        
+        global $conn;
+
+        $query = "SELECT post.id as postId, post.caption, post.date, user.avatarPath,post.imgPath, user.id as userId, user.name, user.last_name FROM post,user WHERE post.id = $id
+        ";
+
+        $result = $conn->query($query);
+
+        return $result->fetch_assoc();
+    }
 
     function getBestPosts(){
         global $conn;
